@@ -1,6 +1,10 @@
 package grid
 
-import "image"
+import (
+	"image"
+	"image/draw"
+	av "github.com/spenserblack/gh-collab-montage/pkg/avatar"
+)
 
 // AddAvatar adds an avatar's image to a grid.
 //
@@ -13,6 +17,13 @@ func (g *AvatarGrid) AddAvatar(avatar image.Image) {
 	} else if g.col == 0 && g.Rows() <= g.row {
 		g.setBounds(g.Rows()+1, g.Cols())
 	}
+	draw.Draw(
+		g.image,
+		image.Rect(0, 0, av.Width, av.Height),
+		avatar,
+		image.Point{g.col*av.Width, g.row*av.Height},
+		draw.Src,
+	)
 	g.col++
 	if g.col == perRow {
 		g.col = 0
