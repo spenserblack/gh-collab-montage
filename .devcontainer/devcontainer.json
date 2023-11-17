@@ -1,6 +1,6 @@
 {
     "name": "Go",
-    "image": "mcr.microsoft.com/vscode/devcontainers/go:1",
+    "image": "mcr.microsoft.com/vscode/devcontainers/go:1.18",
     "features": {
         "ghcr.io/devcontainers/features/github-cli:1": {}
     },
