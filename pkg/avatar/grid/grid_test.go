@@ -70,6 +70,7 @@ func TestNewWithSize(t *testing.T) {
 
 // Tests that size is adjusted when needed.
 func TestGrid_AddAvatar(t *testing.T) {
+	// TODO Test grid's pixels by drawing images with known colors
 	avatar := image.NewAlpha(image.Rect(0, 0, 500, 500))
 	tests := []struct {
 		size int
