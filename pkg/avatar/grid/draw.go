@@ -17,11 +17,13 @@ func (g *AvatarGrid) AddAvatar(avatar image.Image) {
 	} else if g.col == 0 && g.Rows() <= g.row {
 		g.setBounds(g.Rows()+1, g.Cols())
 	}
+	x := g.col * av.Width
+	y := g.row * av.Height
 	draw.Draw(
 		g.image,
-		image.Rect(0, 0, av.Width, av.Height),
+		image.Rect(x, y, x + av.Width, y+av.Height),
 		avatar,
-		image.Point{g.col*av.Width, g.row*av.Height},
+		image.Point{},
 		draw.Src,
 	)
 	g.col++
