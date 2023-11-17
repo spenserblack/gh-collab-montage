@@ -4,16 +4,12 @@ package grid
 import (
 	"image"
 	"image/draw"
+
+	"github.com/spenserblack/gh-collab-montage/pkg/avatar"
 )
 
-const (
-	// AvatarWidth is the width of an avatar in pixels.
-	AvatarWidth = 500
-	// AvatarHeight is the height of an avatar in pixels.
-	AvatarHeight = 500
-	// PerRow is the number of avatars to draw per row.
-	perRow = 10
-)
+// PerRow is the number of avatars to draw per row.
+const perRow = 10
 
 // AvatarGrid is a grid of GitHub avatars.
 //
@@ -48,7 +44,7 @@ func NewWithSize(avatars int) *AvatarGrid {
 		cols = avatars
 	}
 	return &AvatarGrid{
-		image: image.NewRGBA(image.Rect(0, 0, cols*AvatarWidth, rows*AvatarHeight)),
+		image: image.NewRGBA(image.Rect(0, 0, cols*avatar.Width, rows*avatar.Height)),
 	}
 }
 
@@ -59,12 +55,12 @@ func (g AvatarGrid) Image() image.Image {
 
 // Cols returns the number of columns in the grid.
 func (g AvatarGrid) Cols() int {
-	return g.image.Bounds().Dx() / AvatarWidth
+	return g.image.Bounds().Dx() / avatar.Width
 }
 
 // Rows returns the number of rows in the grid.
 func (g AvatarGrid) Rows() int {
-	return g.image.Bounds().Dy() / AvatarHeight
+	return g.image.Bounds().Dy() / avatar.Height
 }
 
 // IncAvatar increments to the next avatar.
@@ -86,7 +82,7 @@ func (g *AvatarGrid) incAvatar() {
 
 // SetBounds changes the bounds of the underlying image.
 func (g *AvatarGrid) setBounds(rows, cols int) {
-	b := image.Rect(0, 0, cols*AvatarWidth, rows*AvatarHeight)
+	b := image.Rect(0, 0, cols*avatar.Width, rows*avatar.Height)
 	newImage := image.NewRGBA(b)
 	draw.Draw(newImage, b, g.image, image.Point{}, draw.Src)
 	g.image = newImage
