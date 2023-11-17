@@ -2,6 +2,7 @@ package grid
 
 import (
 	"fmt"
+	"image"
 	"testing"
 )
 
@@ -68,7 +69,8 @@ func TestNewWithSize(t *testing.T) {
 }
 
 // Tests that size is adjusted when needed.
-func TestGrid_IncAvatar(t *testing.T) {
+func TestGrid_AddAvatar(t *testing.T) {
+	avatar := image.NewAlpha(image.Rect(0, 0, 500, 500))
 	tests := []struct {
 		size int
 		n    int
@@ -168,10 +170,10 @@ func TestGrid_IncAvatar(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		t.Run(fmt.Sprintf("%d-avatar grid incremented %d times", tt.size, tt.n), func(t *testing.T) {
+		t.Run(fmt.Sprintf("%d avatars added to %d-avatar grid", tt.n, tt.size), func(t *testing.T) {
 			g := NewWithSize(tt.size)
 			for i := 0; i < tt.n; i++ {
-				g.incAvatar()
+				g.AddAvatar(avatar)
 			}
 			if g.Cols() != tt.cols {
 				t.Errorf("tt.g.Cols() = %d, want %d", g.Cols(), tt.cols)

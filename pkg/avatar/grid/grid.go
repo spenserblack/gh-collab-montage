@@ -63,23 +63,6 @@ func (g AvatarGrid) Rows() int {
 	return g.image.Bounds().Dy() / avatar.Height
 }
 
-// IncAvatar increments to the next avatar.
-//
-// It expands the grid and adds new columns and rows when needed.
-func (g *AvatarGrid) incAvatar() {
-	// NOTE g.col and g.row are 0-indexed
-	if g.row == 0 && g.Cols() <= g.col {
-		g.setBounds(g.Rows(), g.Cols()+1)
-	} else if g.col == 0 && g.Rows() <= g.row {
-		g.setBounds(g.Rows()+1, g.Cols())
-	}
-	g.col++
-	if g.col == perRow {
-		g.col = 0
-		g.row++
-	}
-}
-
 // SetBounds changes the bounds of the underlying image.
 func (g *AvatarGrid) setBounds(rows, cols int) {
 	b := image.Rect(0, 0, cols*avatar.Width, rows*avatar.Height)
