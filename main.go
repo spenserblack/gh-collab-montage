@@ -2,25 +2,32 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/cli/go-gh/v2/pkg/api"
+	"github.com/cli/go-gh/v2/pkg/repository"
+	"github.com/spenserblack/gh-collab-montage/pkg/usersource"
 )
 
 func main() {
-	fmt.Println("hi world, this is the gh-collab-montage extension!")
 	client, err := api.DefaultRESTClient()
-	if err != nil {
-		fmt.Println(err)
-		return
+	onError(err)
+	repository, err := repository.Current()
+	onError(err)
+	source := usersource.NewContributors(client, repository.Owner, repository.Name)
+	for {
+		user, stop, err := source.Next()
+		onError(err)
+		if stop {
+			break
+		}
+		fmt.Println(user)
 	}
-	response := struct {Login string}{}
-	err = client.Get("user", &response)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fmt.Printf("running as %s\n", response.Login)
 }
 
-// For more examples of using go-gh, see:
-// https://github.com/cli/go-gh/blob/trunk/example_gh_test.go
+func onError(err error) {
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+}
