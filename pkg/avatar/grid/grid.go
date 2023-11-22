@@ -51,14 +51,13 @@ func NewWithSize(avatars int, margin int) *AvatarGrid {
 	} else {
 		cols = avatars
 	}
-	width := cols*avatar.Width + (cols-1)*margin
-	height := rows*avatar.Height + (rows-1)*margin
-	return &AvatarGrid{
-		image:  image.NewRGBA(image.Rect(0, 0, width, height)),
+	g := &AvatarGrid{
 		margin: margin,
 		cols:   cols,
 		rows:   rows,
 	}
+	g.image = g.newDst()
+	return g
 }
 
 // Image returns the image of the grid.
@@ -80,10 +79,14 @@ func (g AvatarGrid) Rows() int {
 func (g *AvatarGrid) setBounds(rows, cols int) {
 	g.cols = cols
 	g.rows = rows
-	width := (cols * avatar.Width) + ((cols - 1) * g.margin)
-	height := (rows * avatar.Height) + ((rows - 1) * g.margin)
-	b := image.Rect(0, 0, width, height)
-	newImage := image.NewRGBA(b)
-	draw.Draw(newImage, b, g.image, image.Point{}, draw.Src)
+	newImage := g.newDst()
+	draw.Draw(newImage, newImage.Bounds(), g.image, image.Point{}, draw.Src)
 	g.image = newImage
+}
+
+// NewDst creates a new destination image based on the grid's dimensions.
+func (g AvatarGrid) newDst() draw.Image {
+	width := g.cols*avatar.Width + (g.cols-1)*g.margin
+	height := g.rows*avatar.Height + (g.rows-1)*g.margin
+	return image.NewRGBA(image.Rect(0, 0, width, height))
 }
