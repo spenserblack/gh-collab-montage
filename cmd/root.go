@@ -39,7 +39,7 @@ var rootCmd = &cobra.Command{
 			onError(err)
 			avatars = append(avatars, a)
 		}
-		g := grid.NewWithSize(len(avatars))
+		g := grid.NewWithSize(len(avatars), margin)
 		for _, a := range avatars {
 			g.AddAvatar(a)
 		}
@@ -48,4 +48,10 @@ var rootCmd = &cobra.Command{
 		err = png.Encode(f, m)
 		onError(err)
 	},
+}
+
+var margin int
+
+func init() {
+	rootCmd.PersistentFlags().IntVarP(&margin, "margin", "m", 100, "Margin between avatars")
 }
