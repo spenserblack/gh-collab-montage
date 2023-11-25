@@ -16,17 +16,25 @@ const perRow = 10
 // It expands and adds new rows when needed.
 type AvatarGrid struct {
 	image draw.Image
-	row   int
-	col   int
+	// Row is the current row (0-indexed).
+	row int
+	// Col is the current column (0-indexed).
+	col int
+	// Margin is the number of pixels between avatars.
+	margin int
+	// Cols is the number of columns in the grid.
+	cols int
+	// Rows is the number of rows in the grid.
+	rows int
 }
 
 // New returns a new AvatarGrid.
-func New() *AvatarGrid {
-	return NewWithSize(0)
+func New(margin int) *AvatarGrid {
+	return NewWithSize(0, margin)
 }
 
 // NewWithSize returns a new AvatarGrid with the given size.
-func NewWithSize(avatars int) *AvatarGrid {
+func NewWithSize(avatars int, margin int) *AvatarGrid {
 	var cols, rows int
 	if avatars == 0 {
 		rows = 1
@@ -43,9 +51,13 @@ func NewWithSize(avatars int) *AvatarGrid {
 	} else {
 		cols = avatars
 	}
-	return &AvatarGrid{
-		image: image.NewRGBA(image.Rect(0, 0, cols*avatar.Width, rows*avatar.Height)),
+	g := &AvatarGrid{
+		margin: margin,
+		cols:   cols,
+		rows:   rows,
 	}
+	g.image = g.newDst()
+	return g
 }
 
 // Image returns the image of the grid.
@@ -55,18 +67,26 @@ func (g AvatarGrid) Image() image.Image {
 
 // Cols returns the number of columns in the grid.
 func (g AvatarGrid) Cols() int {
-	return g.image.Bounds().Dx() / avatar.Width
+	return g.cols
 }
 
 // Rows returns the number of rows in the grid.
 func (g AvatarGrid) Rows() int {
-	return g.image.Bounds().Dy() / avatar.Height
+	return g.rows
 }
 
 // SetBounds changes the bounds of the underlying image.
 func (g *AvatarGrid) setBounds(rows, cols int) {
-	b := image.Rect(0, 0, cols*avatar.Width, rows*avatar.Height)
-	newImage := image.NewRGBA(b)
-	draw.Draw(newImage, b, g.image, image.Point{}, draw.Src)
+	g.cols = cols
+	g.rows = rows
+	newImage := g.newDst()
+	draw.Draw(newImage, newImage.Bounds(), g.image, image.Point{}, draw.Src)
 	g.image = newImage
+}
+
+// NewDst creates a new destination image based on the grid's dimensions.
+func (g AvatarGrid) newDst() draw.Image {
+	width := g.cols*avatar.Width + (g.cols-1)*g.margin
+	height := g.rows*avatar.Height + (g.rows-1)*g.margin
+	return image.NewRGBA(image.Rect(0, 0, width, height))
 }
