@@ -7,6 +7,7 @@ toolchain go1.21.4
 require (
 	github.com/cli/go-gh/v2 v2.4.0
 	github.com/spf13/cobra v1.8.0
+	golang.org/x/image v0.14.0
 )
 
 require (
@@ -25,6 +26,6 @@ require (
 	github.com/thlib/go-timezone-local v0.0.0-20210907160436-ef149e42d28e // indirect
 	golang.org/x/sys v0.13.0 // indirect
 	golang.org/x/term v0.13.0 // indirect
-	golang.org/x/text v0.13.0 // indirect
+	golang.org/x/text v0.14.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
