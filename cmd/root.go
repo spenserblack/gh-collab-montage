@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"image"
 	"image/png"
 	"os"
@@ -39,7 +40,17 @@ var rootCmd = &cobra.Command{
 			onError(err)
 			avatars = append(avatars, a)
 		}
-		g := grid.NewWithSize(len(avatars), margin)
+
+		var formatter avatar.Formatter
+		switch avatarStyle {
+		case "", "circle":
+			formatter = avatar.Circlify
+		case "square":
+			formatter = avatar.Noop
+		default:
+			panic("unreachable: invalid avatar style")
+		}
+		g := grid.NewWithSize(len(avatars), margin, formatter)
 		for _, a := range avatars {
 			g.AddAvatar(a)
 		}
@@ -50,8 +61,33 @@ var rootCmd = &cobra.Command{
 	},
 }
 
-var margin int
+// AvatarStyleEnum is an enum for the different styles of images
+type avatarStyleEnum string
+
+func (i avatarStyleEnum) String() string {
+	return string(i)
+}
+
+func (i *avatarStyleEnum) Set(value string) error {
+	switch value {
+	case "circle", "square":
+		*i = avatarStyleEnum(value)
+	default:
+		return errors.New("invalid image style")
+	}
+	return nil
+}
+
+func (i avatarStyleEnum) Type() string {
+	return "circle | square"
+}
+
+var (
+	margin      int
+	avatarStyle avatarStyleEnum
+)
 
 func init() {
 	rootCmd.PersistentFlags().IntVarP(&margin, "margin", "m", 100, "Margin between avatars")
+	rootCmd.PersistentFlags().VarP(&avatarStyle, "style", "s", "Style of avatar (default circle)")
 }

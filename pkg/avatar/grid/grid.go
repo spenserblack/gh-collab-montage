@@ -26,15 +26,17 @@ type AvatarGrid struct {
 	cols int
 	// Rows is the number of rows in the grid.
 	rows int
+	// Formatter is a function to call on avatar images to format them.
+	formatter avatar.Formatter
 }
 
 // New returns a new AvatarGrid.
-func New(margin int) *AvatarGrid {
-	return NewWithSize(0, margin)
+func New(margin int, formatter avatar.Formatter) *AvatarGrid {
+	return NewWithSize(0, margin, formatter)
 }
 
 // NewWithSize returns a new AvatarGrid with the given size.
-func NewWithSize(avatars int, margin int) *AvatarGrid {
+func NewWithSize(avatars int, margin int, formatter avatar.Formatter) *AvatarGrid {
 	var cols, rows int
 	if avatars == 0 {
 		rows = 1
@@ -52,9 +54,10 @@ func NewWithSize(avatars int, margin int) *AvatarGrid {
 		cols = avatars
 	}
 	g := &AvatarGrid{
-		margin: margin,
-		cols:   cols,
-		rows:   rows,
+		margin:    margin,
+		cols:      cols,
+		rows:      rows,
+		formatter: formatter,
 	}
 	g.image = g.newDst()
 	return g
