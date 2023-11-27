@@ -18,8 +18,8 @@ var rootCmd = &cobra.Command{
 	Short: "Combine your contributors avatars into a single image",
 	Run: func(cmd *cobra.Command, args []string) {
 		f, err := os.Create("montage.png")
-		defer f.Close()
 		onError(err)
+		defer f.Close()
 		client, err := api.DefaultRESTClient()
 		onError(err)
 		repository, err := repository.Current()
