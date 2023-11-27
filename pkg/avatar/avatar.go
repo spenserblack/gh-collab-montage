@@ -3,7 +3,7 @@ package avatar
 
 const (
 	// Width is the width of an avatar in pixels.
-	Width = 432
+	Width = 400
 	// Height is the height of an avatar in pixels.
-	Height = 432
+	Height = 400
 )
