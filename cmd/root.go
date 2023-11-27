@@ -46,8 +46,8 @@ var rootCmd = &cobra.Command{
 		}
 
 		var formatter avatar.Formatter
-		switch avatarStyle {
-		case "", "circle":
+		switch avatarStyle.String() {
+		case "circle":
 			formatter = avatar.Circlify
 		case "square":
 			formatter = avatar.Noop
@@ -69,6 +69,9 @@ var rootCmd = &cobra.Command{
 type avatarStyleEnum string
 
 func (i avatarStyleEnum) String() string {
+	if i == "" {
+		return "circle"
+	}
 	return string(i)
 }
 
