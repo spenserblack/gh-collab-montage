@@ -6,6 +6,12 @@
 Combine avatars of all contributors into one image. Just call `gh collab-montage` and this extension will query all contributors, fetch their avatars, and
 combine them all into one PNG. This extension also provides a public library to provide utilities for making your own montage.
 
+## Installation
+
+```shell
+gh extension install spenserblack/gh-collab-montage
+```
+
 ## Features
 
 - Specify if you want the avatars to be circles or squares
