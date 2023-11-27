@@ -2,8 +2,10 @@
 package grid
 
 import (
-	"golang.org/x/image/draw"
 	"image"
+	"image/color"
+
+	"golang.org/x/image/draw"
 
 	"github.com/spenserblack/gh-collab-montage/pkg/avatar"
 )
@@ -92,4 +94,19 @@ func (g AvatarGrid) newDst() draw.Image {
 	width := g.cols*avatar.Width + (g.cols-1)*g.margin
 	height := g.rows*avatar.Height + (g.rows-1)*g.margin
 	return image.NewRGBA(image.Rect(0, 0, width, height))
+}
+
+// ColorModel returns the color model of the underlying image.
+func (g AvatarGrid) ColorModel() color.Model {
+	return g.image.ColorModel()
+}
+
+// Bounds returns the bounds of the underlying image.
+func (g AvatarGrid) Bounds() image.Rectangle {
+	return g.image.Bounds()
+}
+
+// At returns the color of the pixel at (x, y).
+func (g AvatarGrid) At(x, y int) color.Color {
+	return g.image.At(x, y)
 }

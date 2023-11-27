@@ -61,8 +61,7 @@ var rootCmd = &cobra.Command{
 			g.AddAvatar(a)
 		}
 
-		m := g.Image()
-		err = png.Encode(f, m)
+		err = png.Encode(f, g)
 		onError(err)
 	},
 }
