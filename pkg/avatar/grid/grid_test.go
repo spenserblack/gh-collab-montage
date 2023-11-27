@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"image"
 	"testing"
+
+	av "github.com/spenserblack/gh-collab-montage/pkg/avatar"
 )
 
 func TestNew(t *testing.T) {
-	g := New(100)
+	g := New(100, av.Noop)
 	if g.Cols() != 0 {
 		t.Errorf("g.Cols() = %d, want 0", g.Cols())
 	}
@@ -57,7 +59,7 @@ func TestNewWithSize(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			g := NewWithSize(tt.avatars, 100)
+			g := NewWithSize(tt.avatars, 100, av.Noop)
 			if g.Cols() != tt.cols {
 				t.Errorf("g.Cols() = %d, want %d", g.Cols(), tt.cols)
 			}
@@ -172,7 +174,7 @@ func TestGrid_AddAvatar(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(fmt.Sprintf("%d avatars added to %d-avatar grid", tt.n, tt.size), func(t *testing.T) {
-			g := NewWithSize(tt.size, 100)
+			g := NewWithSize(tt.size, 100, av.Noop)
 			for i := 0; i < tt.n; i++ {
 				g.AddAvatar(avatar)
 			}

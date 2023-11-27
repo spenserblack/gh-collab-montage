@@ -12,6 +12,7 @@ import (
 // If needed, it expands the size of the underlying image.
 func (g *AvatarGrid) AddAvatar(avatar image.Image) {
 	// TODO Assert that avatars are the appropriate size?
+	formatted := g.formatter(avatar)
 	// NOTE g.col and g.row are 0-indexed
 	if g.row == 0 && g.Cols() <= g.col {
 		g.setBounds(g.Rows(), g.Cols()+1)
@@ -23,7 +24,7 @@ func (g *AvatarGrid) AddAvatar(avatar image.Image) {
 	draw.Draw(
 		g.image,
 		image.Rect(x, y, x+av.Width, y+av.Height),
-		avatar,
+		formatted,
 		image.Point{},
 		draw.Src,
 	)

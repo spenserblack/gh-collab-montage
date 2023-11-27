@@ -40,7 +40,17 @@ var rootCmd = &cobra.Command{
 			onError(err)
 			avatars = append(avatars, a)
 		}
-		g := grid.NewWithSize(len(avatars), margin)
+
+		var formatter avatar.Formatter
+		switch avatarStyle {
+		case "", "circle":
+			formatter = avatar.Circlify
+		case "square":
+			formatter = avatar.Noop
+		default:
+			panic("unreachable: invalid avatar style")
+		}
+		g := grid.NewWithSize(len(avatars), margin, formatter)
 		for _, a := range avatars {
 			g.AddAvatar(a)
 		}
@@ -60,8 +70,6 @@ func (i avatarStyleEnum) String() string {
 
 func (i *avatarStyleEnum) Set(value string) error {
 	switch value {
-	case "":
-		*i = "circle"
 	case "circle", "square":
 		*i = avatarStyleEnum(value)
 	default:
@@ -75,7 +83,7 @@ func (i avatarStyleEnum) Type() string {
 }
 
 var (
-	margin     int
+	margin      int
 	avatarStyle avatarStyleEnum
 )
 
