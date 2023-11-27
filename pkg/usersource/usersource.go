@@ -8,7 +8,7 @@ type User struct {
 	// AvatarURL is the URL of the user's avatar.
 	AvatarURL string `json:"avatar_url"`
 	// Type is either "User" or "Bot".
-	Type    string `json:"type"`
+	Type string `json:"type"`
 }
 
 // UserSource provides a utility to iterate over users.
