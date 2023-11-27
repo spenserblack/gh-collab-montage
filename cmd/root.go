@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"image"
 	"image/png"
 	"os"
@@ -50,8 +51,35 @@ var rootCmd = &cobra.Command{
 	},
 }
 
-var margin int
+// ImageStyleEnum is an enum for the different styles of images
+type imageStyleEnum string
+
+func (i imageStyleEnum) String() string {
+	return string(i)
+}
+
+func (i *imageStyleEnum) Set(value string) error {
+	switch value {
+	case "":
+		*i = "circle"
+	case "circle", "square":
+		*i = imageStyleEnum(value)
+	default:
+		return errors.New("invalid image style")
+	}
+	return nil
+}
+
+func (i imageStyleEnum) Type() string {
+	return "circle | square"
+}
+
+var (
+	margin     int
+	imageStyle imageStyleEnum
+)
 
 func init() {
 	rootCmd.PersistentFlags().IntVarP(&margin, "margin", "m", 100, "Margin between avatars")
+	rootCmd.PersistentFlags().VarP(&imageStyle, "style", "s", "Style of avatar (default circle)")
 }
