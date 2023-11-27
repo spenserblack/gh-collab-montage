@@ -27,7 +27,6 @@ func TestCirclify(t *testing.T) {
 		{0, 0, transparent},
 		{50, 50, baseColor},
 		{99, 99, transparent},
-		
 	}
 
 	for _, tt := range tests {
