@@ -2,9 +2,11 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 	"image"
 	"image/png"
 	"os"
+	"strings"
 
 	"github.com/cli/go-gh/v2/pkg/api"
 	"github.com/cli/go-gh/v2/pkg/repository"
@@ -19,14 +21,14 @@ var rootCmd = &cobra.Command{
 	Use:   "gh-collab-montage",
 	Short: "Combine your contributors avatars into a single image",
 	Run: func(cmd *cobra.Command, args []string) {
+		err := repoFlag.fillWithDefault()
+		onError(err)
 		f, err := os.Create("montage.png")
 		onError(err)
 		defer f.Close()
 		client, err := api.DefaultRESTClient()
 		onError(err)
-		repository, err := repository.Current()
-		onError(err)
-		source := usersource.NewContributors(client, repository.Owner, repository.Name)
+		source := usersource.NewContributors(client, repoFlag.Owner, repoFlag.Name)
 		avatars := []image.Image{}
 		for {
 			user, stop, err := source.Next()
@@ -89,12 +91,59 @@ func (i avatarStyleEnum) Type() string {
 	return "circle | square"
 }
 
+// Repo represents a GitHub repository
+type repo struct {
+	Owner string
+	Name  string
+}
+
+func (r repo) String() string {
+	if r.isEmpty() {
+		return ""
+	}
+	return fmt.Sprintf("%s/%s", r.Owner, r.Name)
+}
+
+func (r *repo) Set(value string) error {
+	split := strings.Split(value, "/")
+	if len(split) != 2 {
+		return errors.New("invalid repository format")
+	}
+	r.Owner, r.Name = split[0], split[1]
+	return nil
+}
+
+func (repo) Type() string {
+	return "OWNER/REPO"
+}
+
+// IsEmpty returns true if the repository hasn't been set.
+func (r repo) isEmpty() bool {
+	return r.Owner == "" && r.Name == ""
+}
+
+// FillWithDefault fills the repository with the current repository's info
+// if the repository hasn't been set.
+func (r *repo) fillWithDefault() error {
+	if !r.isEmpty() {
+		return nil
+	}
+	repository, err := repository.Current()
+	if err != nil {
+		return err
+	}
+	r.Owner, r.Name = repository.Owner, repository.Name
+	return nil
+}
+
 var (
 	margin      int
 	avatarStyle avatarStyleEnum
+	repoFlag    repo
 )
 
 func init() {
+	rootCmd.PersistentFlags().VarP(&repoFlag, "repo", "R", "Specify another repository")
 	rootCmd.PersistentFlags().IntVarP(&margin, "margin", "m", 100, "Margin between avatars")
-	rootCmd.PersistentFlags().VarP(&avatarStyle, "style", "s", "Style of avatar (default circle)")
+	rootCmd.PersistentFlags().VarP(&avatarStyle, "style", "s", "Style of avatar")
 }
