@@ -17,7 +17,7 @@ func Circlify(avatar image.Image) image.Image {
 	circle := image.NewRGBA(avatar.Bounds())
 	draw.Draw(circle, avatar.Bounds(), avatar, image.Point{}, draw.Src)
 
-	origin := struct{
+	origin := struct {
 		x float64
 		y float64
 	}{
