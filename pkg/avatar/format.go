@@ -3,8 +3,9 @@ package avatar
 import (
 	"image"
 	"image/color"
-	"image/draw"
 	"math"
+
+	"golang.org/x/image/draw"
 )
 
 // Formatter is a function to call on avatar images to format them.

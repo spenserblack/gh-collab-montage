@@ -12,6 +12,7 @@ import (
 	"github.com/spenserblack/gh-collab-montage/pkg/avatar/grid"
 	"github.com/spenserblack/gh-collab-montage/pkg/usersource"
 	"github.com/spf13/cobra"
+	"golang.org/x/image/draw"
 )
 
 var rootCmd = &cobra.Command{
@@ -38,7 +39,10 @@ var rootCmd = &cobra.Command{
 			}
 			a, err := avatar.Decode(user.AvatarURL)
 			onError(err)
-			avatars = append(avatars, a)
+			// TODO Expose this to users
+			resized := image.NewRGBA(image.Rect(0, 0, avatar.Width, avatar.Height))
+			draw.NearestNeighbor.Scale(resized, resized.Bounds(), a, a.Bounds(), draw.Src, nil)
+			avatars = append(avatars, resized)
 		}
 
 		var formatter avatar.Formatter

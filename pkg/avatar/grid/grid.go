@@ -2,8 +2,8 @@
 package grid
 
 import (
+	"golang.org/x/image/draw"
 	"image"
-	"image/draw"
 
 	"github.com/spenserblack/gh-collab-montage/pkg/avatar"
 )

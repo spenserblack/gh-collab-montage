@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"image"
 	"image/color"
-	"image/draw"
 	"testing"
+
+	"golang.org/x/image/draw"
 )
 
 func TestCirclify(t *testing.T) {
