@@ -55,7 +55,7 @@ var rootCmd = &cobra.Command{
 			if user.Type != "User" {
 				continue
 			}
-			a, err := avatar.Decode(user.AvatarURL)
+			a, err := avatar.DecodeFromURL(user.AvatarURL)
 			onError(err)
 			avatars = append(avatars, a)
 		}
