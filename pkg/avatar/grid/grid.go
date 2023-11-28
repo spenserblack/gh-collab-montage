@@ -17,28 +17,27 @@ const perRow = 10
 //
 // It expands and adds new rows when needed.
 type AvatarGrid struct {
+	// AvatarSize is the size of each avatar in the grid.
+	AvatarSize int
+	// Margin is the number of pixels between avatars.
+	Margin int
+	// Formatter is a function to call on avatar images to format them.
+	Formatter avatar.Formatter
+	// Image is the underlying image of the grid.
 	image draw.Image
 	// Row is the current row (0-indexed).
 	row int
 	// Col is the current column (0-indexed).
 	col int
-	// Margin is the number of pixels between avatars.
-	margin int
 	// Cols is the number of columns in the grid.
 	cols int
 	// Rows is the number of rows in the grid.
 	rows int
-	// Formatter is a function to call on avatar images to format them.
-	formatter avatar.Formatter
 }
 
-// New returns a new AvatarGrid.
-func New(margin int, formatter avatar.Formatter) *AvatarGrid {
-	return NewWithSize(0, margin, formatter)
-}
-
-// NewWithSize returns a new AvatarGrid with the given size.
-func NewWithSize(avatars int, margin int, formatter avatar.Formatter) *AvatarGrid {
+// WithSize updates the underlying image of the grid to fit the given number of
+// avatars. This can help prevent frequent resizing of the underlying image.
+func (g *AvatarGrid) WithSize(avatars int) {
 	var cols, rows int
 	if avatars == 0 {
 		rows = 1
@@ -55,14 +54,8 @@ func NewWithSize(avatars int, margin int, formatter avatar.Formatter) *AvatarGri
 	} else {
 		cols = avatars
 	}
-	g := &AvatarGrid{
-		margin:    margin,
-		cols:      cols,
-		rows:      rows,
-		formatter: formatter,
-	}
+	g.cols, g.rows = cols, rows
 	g.image = g.newDst()
-	return g
 }
 
 // Image returns the image of the grid.
@@ -91,8 +84,8 @@ func (g *AvatarGrid) setBounds(rows, cols int) {
 
 // NewDst creates a new destination image based on the grid's dimensions.
 func (g AvatarGrid) newDst() draw.Image {
-	width := g.cols*avatar.Width + (g.cols-1)*g.margin
-	height := g.rows*avatar.Height + (g.rows-1)*g.margin
+	width := g.cols*g.AvatarSize + (g.cols-1)*g.Margin
+	height := g.rows*g.AvatarSize + (g.rows-1)*g.Margin
 	return image.NewRGBA(image.Rect(0, 0, width, height))
 }
 

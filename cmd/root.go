@@ -14,7 +14,6 @@ import (
 	"github.com/spenserblack/gh-collab-montage/pkg/avatar/grid"
 	"github.com/spenserblack/gh-collab-montage/pkg/usersource"
 	"github.com/spf13/cobra"
-	"golang.org/x/image/draw"
 )
 
 var rootCmd = &cobra.Command{
@@ -23,8 +22,23 @@ var rootCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		err := repoFlag.fillWithDefault()
 		onError(err)
-		avatar.Width = avatarSize
-		avatar.Height = avatarSize
+
+		var formatter avatar.Formatter
+		switch avatarStyle.String() {
+		case "circle":
+			formatter = avatar.Circlify
+		case "square":
+			formatter = avatar.Noop
+		default:
+			panic("unreachable: invalid avatar style")
+		}
+
+		g := &grid.AvatarGrid{
+			AvatarSize: avatarSize,
+			Margin:     margin,
+			Formatter:  formatter,
+		}
+
 		f, err := os.Create("montage.png")
 		onError(err)
 		defer f.Close()
@@ -43,22 +57,9 @@ var rootCmd = &cobra.Command{
 			}
 			a, err := avatar.Decode(user.AvatarURL)
 			onError(err)
-			// TODO Expose this to users
-			resized := image.NewRGBA(image.Rect(0, 0, avatar.Width, avatar.Height))
-			draw.ApproxBiLinear.Scale(resized, resized.Bounds(), a, a.Bounds(), draw.Src, nil)
-			avatars = append(avatars, resized)
+			avatars = append(avatars, a)
 		}
-
-		var formatter avatar.Formatter
-		switch avatarStyle.String() {
-		case "circle":
-			formatter = avatar.Circlify
-		case "square":
-			formatter = avatar.Noop
-		default:
-			panic("unreachable: invalid avatar style")
-		}
-		g := grid.NewWithSize(len(avatars), margin, formatter)
+		g.WithSize(len(avatars))
 		for _, a := range avatars {
 			g.AddAvatar(a)
 		}
