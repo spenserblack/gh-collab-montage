@@ -23,6 +23,8 @@ var rootCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		err := repoFlag.fillWithDefault()
 		onError(err)
+		avatar.Width = avatarSize
+		avatar.Height = avatarSize
 		f, err := os.Create("montage.png")
 		onError(err)
 		defer f.Close()
@@ -136,6 +138,7 @@ func (r *repo) fillWithDefault() error {
 }
 
 var (
+	avatarSize  int
 	margin      int
 	avatarStyle avatarStyleEnum
 	repoFlag    repo
@@ -143,6 +146,7 @@ var (
 
 func init() {
 	rootCmd.PersistentFlags().VarP(&repoFlag, "repo", "R", "Specify another repository")
+	rootCmd.PersistentFlags().IntVarP(&avatarSize, "size", "S", 400, "Size of avatars")
 	rootCmd.PersistentFlags().IntVarP(&margin, "margin", "m", 100, "Margin between avatars")
 	rootCmd.PersistentFlags().VarP(&avatarStyle, "style", "s", "Style of avatar")
 }
