@@ -8,17 +8,7 @@ import (
 	av "github.com/spenserblack/gh-collab-montage/pkg/avatar"
 )
 
-func TestNew(t *testing.T) {
-	g := New(100, av.Noop)
-	if g.Cols() != 0 {
-		t.Errorf("g.Cols() = %d, want 0", g.Cols())
-	}
-	if g.Rows() != 1 {
-		t.Errorf("g.Rows() = %d, want 1", g.Rows())
-	}
-}
-
-func TestNewWithSize(t *testing.T) {
+func TestWithSize(t *testing.T) {
 	tests := []struct {
 		name    string
 		avatars int
@@ -59,7 +49,12 @@ func TestNewWithSize(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			g := NewWithSize(tt.avatars, 100, av.Noop)
+			g := &Grid{
+				AvatarSize: 400,
+				Margin:     100,
+				Formatter:  av.Noop,
+			}
+			g.WithSize(tt.avatars)
 			if g.Cols() != tt.cols {
 				t.Errorf("g.Cols() = %d, want %d", g.Cols(), tt.cols)
 			}
@@ -174,7 +169,12 @@ func TestGrid_AddAvatar(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(fmt.Sprintf("%d avatars added to %d-avatar grid", tt.n, tt.size), func(t *testing.T) {
-			g := NewWithSize(tt.size, 100, av.Noop)
+			g := &Grid{
+				AvatarSize: 400,
+				Margin:     100,
+				Formatter:  av.Noop,
+			}
+			g.WithSize(tt.size)
 			for i := 0; i < tt.n; i++ {
 				g.AddAvatar(avatar)
 			}
@@ -186,5 +186,17 @@ func TestGrid_AddAvatar(t *testing.T) {
 			}
 		})
 	}
+}
 
+// Tests that the Noop formatter is used when no formatter is provided.
+func TestGrid_AddAvatar_nil_formatter(t *testing.T) {
+	avatar := image.NewAlpha(image.Rect(0, 0, 500, 500))
+	g := &Grid{
+		AvatarSize: 400,
+		Margin:     100,
+	}
+	g.WithSize(1)
+	g.AddAvatar(avatar)
+	// NOTE Basically if we didn't panic from a nil pointer dereference, we're good
+	// TODO Test grid's pixels by drawing images with known colors
 }

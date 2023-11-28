@@ -8,8 +8,10 @@ import (
 	"net/http"
 )
 
-// Decode decodes a GitHub avatar from a URL.
-func Decode(url string) (image.Image, error) {
+// DecodeFromURL decodes an image GitHub avatar from a URL.
+//
+// This can be used to get an avatar from GitHub.
+func DecodeFromURL(url string) (image.Image, error) {
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
