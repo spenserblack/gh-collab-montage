@@ -11,7 +11,7 @@ import (
 // AddAvatar adds an avatar's image to a grid.
 //
 // If needed, it expands the size of the underlying image.
-func (g *AvatarGrid) AddAvatar(avatar image.Image) {
+func (g *Grid) AddAvatar(avatar image.Image) {
 	resized := image.NewRGBA(image.Rect(0, 0, g.AvatarSize, g.AvatarSize))
 	draw.ApproxBiLinear.Scale(resized, resized.Bounds(), avatar, avatar.Bounds(), draw.Src, nil)
 

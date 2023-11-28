@@ -33,7 +33,7 @@ var rootCmd = &cobra.Command{
 			panic("unreachable: invalid avatar style")
 		}
 
-		g := &grid.AvatarGrid{
+		g := &grid.Grid{
 			AvatarSize: avatarSize,
 			Margin:     margin,
 			Formatter:  formatter,

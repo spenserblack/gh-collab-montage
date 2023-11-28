@@ -49,7 +49,7 @@ func TestWithSize(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			g := &AvatarGrid{
+			g := &Grid{
 				AvatarSize: 400,
 				Margin:     100,
 				Formatter:  av.Noop,
@@ -169,7 +169,7 @@ func TestGrid_AddAvatar(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(fmt.Sprintf("%d avatars added to %d-avatar grid", tt.n, tt.size), func(t *testing.T) {
-			g := &AvatarGrid{
+			g := &Grid{
 				AvatarSize: 400,
 				Margin:     100,
 				Formatter:  av.Noop,
