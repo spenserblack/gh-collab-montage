@@ -17,6 +17,13 @@ gh extension install spenserblack/gh-collab-montage
 - Specify if you want the avatars to be circles or squares
 - Specify the margin between avatars
 
+## Example
+
+The following example was generated with `gh collab-montage -R o2sh/onefetch --size 100 --margin 5`.
+
+![montage](https://github.com/spenserblack/gh-collab-montage/assets/8546709/4c2b673a-2ae0-4958-a2a6-69a56185ed23)
+
+
 ## Credits
 
 This extension was inspired by [avatar-montage](https://github.com/benbalter/avatar-montage).
