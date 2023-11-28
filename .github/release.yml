@@ -5,6 +5,9 @@ changelog:
       # GitHub Actions updates aren't user-facing
       - github_actions
   categories:
+    - title: Breaking Changes
+      labels:
+        - breaking
     - title: Features
       labels:
         - enhancement
