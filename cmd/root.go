@@ -43,7 +43,7 @@ var rootCmd = &cobra.Command{
 			onError(err)
 			// TODO Expose this to users
 			resized := image.NewRGBA(image.Rect(0, 0, avatar.Width, avatar.Height))
-			draw.NearestNeighbor.Scale(resized, resized.Bounds(), a, a.Bounds(), draw.Src, nil)
+			draw.ApproxBiLinear.Scale(resized, resized.Bounds(), a, a.Bounds(), draw.Src, nil)
 			avatars = append(avatars, resized)
 		}
 
