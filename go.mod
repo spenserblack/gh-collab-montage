@@ -7,7 +7,7 @@ toolchain go1.21.4
 require (
 	github.com/cli/go-gh/v2 v2.4.0
 	github.com/spf13/cobra v1.8.0
-	golang.org/x/image v0.14.0
+	golang.org/x/image v0.15.0
 )
 
 require (
