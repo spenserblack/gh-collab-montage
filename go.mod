@@ -5,7 +5,7 @@ go 1.21
 toolchain go1.21.4
 
 require (
-	github.com/cli/go-gh/v2 v2.5.0
+	github.com/cli/go-gh/v2 v2.6.0
 	github.com/spf13/cobra v1.8.0
 	golang.org/x/image v0.15.0
 )
