@@ -3,7 +3,7 @@ module github.com/spenserblack/gh-collab-montage
 go 1.26.0
 
 require (
-	github.com/cli/go-gh/v2 v2.16.0
+	github.com/cli/go-gh/v2 v2.16.1
 	github.com/spf13/cobra v1.10.2
 	golang.org/x/image v0.46.0
 )
